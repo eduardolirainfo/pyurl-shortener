@@ -5,8 +5,9 @@ app = Flask(__name__)
 
 @app.route('/')
 def index():
-    return '<h1> Hello World</h1>'
+    return '<h1> Hello World a</h1>'
 
 
-if __name__ == '__main__':
-    app.run(debug=True)
+@app.route('/about')
+def about():
+    return '<h1> This is a URL shortener</h1>'
