@@ -1,0 +1,5 @@
+[default]
+DEBUG = false
+TITLE = "Pyurl-shortener"
+SECRET_KEY = 'xdejadkfbsdkjbfbhhkjkjhfkjdh1357526%$^"£"'
+EXTENSIONS = ["pyurl_shortener.blueprints.webui:init_app"]

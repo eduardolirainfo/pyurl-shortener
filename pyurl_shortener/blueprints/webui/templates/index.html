@@ -1,0 +1,35 @@
+{% block content %}
+<h1> URL Shortener </h1>
+
+{% for message in get_flashed_messages() %}
+<span>{{ message }}</span>
+{% endfor %}
+
+<form action="/your-url" method="post">
+    <label for="url">Website URL</label>
+    <input type="url" name="url" value="" required>
+    <br>
+    <label for="code">Short Name</label>
+    <input type="text" name="code" value="" required>
+    <br>
+    <input type="submit" value="Shorten">
+</form>
+
+{% if error %}
+<p>teste</p>
+<p>{{ error }}</p>
+{% endif %}
+
+{% if url %}
+<p>Shortened URL: <a href="{{ url }}">{{ url }}</a></p>
+{% endif %}
+
+{% if urls %}
+<h2>URLs</h2>
+<ul>
+    {% for url in urls %}
+    <li><a href="{{ url }}">{{ url }}</a></li>
+    {% endfor %}
+</ul>
+{% endif %}
+{% endblock %}

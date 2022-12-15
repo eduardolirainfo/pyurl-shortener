@@ -1,1 +1,1 @@
-FLASK_APP=urlshort
+FLASK_APP=pyurl_shortener.app:create_app
