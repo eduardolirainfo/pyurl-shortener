@@ -1,7 +1,14 @@
 import os.path
 import json
-import string
-from flask import render_template, request, url_for, redirect, flash
+from flask import (
+    render_template,
+    request,
+    url_for,
+    redirect,
+    flash,
+    abort,
+    session,
+)
 
 
 def index():
@@ -9,7 +16,7 @@ def index():
     Returns:
         string: return index.html
     """
-    return render_template("index.html")
+    return render_template("index.html", codes=session.keys())
 
 
 def about():
@@ -20,6 +27,18 @@ def about():
     return render_template("about.html")
 
 
+def exist_path():
+    """check if the path exist
+    Returns:
+        string: return the path
+    """
+    file_path = os.path.dirname(__file__)
+    file_path = os.path.join(file_path, "instances", "urls.json")
+    is_exist = os.path.exists(file_path)
+
+    return (file_path, is_exist)
+
+
 def your_url():
     """return of the post method with url code
        if the method is not post, return to index.html
@@ -28,12 +47,13 @@ def your_url():
     """
     if request.method == "POST":
         urls = {}
-        file_path = os.path.join(os.path.dirname(__file__), "urls.json")
-        is_exist = os.path.exists(file_path)
+
+        file_path, is_exist = exist_path()
 
         if is_exist:
             with open(file_path, encoding="utf-8") as urls_file:
                 urls = json.load(urls_file)
+
         if request.form["code"] in urls.keys():
             flash("Short name has already been taken. Select another name")
             return redirect(url_for("webui.index"))
@@ -41,6 +61,8 @@ def your_url():
         urls[request.form["code"]] = {"url": request.form["url"]}
         with open(file_path, "w", encoding="utf-8") as url_file:
             json.dump(urls, url_file)
+            session[request.form["code"]] = True
+            url_file.close()
         return render_template("your_url.html", code=request.form["code"])
     else:
         return redirect(url_for("webui.index"))
@@ -51,24 +73,21 @@ def redirect_to_url(code):
     Returns:
         string: return redirect to the url
     """
-    file_path = exist_path()
+    file_path, is_exist = exist_path()
 
-    if file_path is not None:
+    if is_exist:
         with open(file_path, encoding="utf-8") as urls_file:
             urls = json.load(urls_file)
             if code in urls.keys():
                 if "url" in urls[code].keys():
                     return redirect(urls[code]["url"])
-    return redirect(url_for("webui.index"))
+    return abort(404)
 
 
-def exist_path():
-    """check if the path exist
+def page_not_found(error):
+    """return page_not_found.html
     Returns:
-        string: return the path
+        string: return page_not_found.html
     """
-    file_path = os.path.join(os.path.dirname(__file__), "urls.json")
-    is_exist = os.path.exists(file_path)
-    if is_exist:
-        return file_path
-    return None
+    code = error.code
+    return render_template("page_not_found.html"), code
