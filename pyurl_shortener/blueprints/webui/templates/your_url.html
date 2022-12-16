@@ -1,4 +1,8 @@
-{% block content %}
-<h1> Your URL page </h1>
-<h2>{{ code }}</h2>
+{% extends "base.html" %}
+{% block title %}Your URL page for {{ code }} {% endblock %}
+{% block main %}
+<h1>Your URL page</h1>
+
+<h2><a href="{{ url_for('webui.redirect_to_url',code=code) }}" title="{{ url }}">{{ code }}</a>
+</h2>
 {% endblock %}
