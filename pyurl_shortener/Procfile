@@ -1,1 +1,1 @@
-web: pyurl_shortener.app:create_app 127.0.0.1:5000
+web: gunicorn pyurl_shortener.app:create_app
