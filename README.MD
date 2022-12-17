@@ -80,7 +80,7 @@ $ flask --debug run
 This project is under license from MIT. For more details, see the [LICENSE](LICENSE) file.
 
 
-Made with :heart: by <a href="https://github.com/eduardolirainfo" target="_blank">{{author}}</a>
+Made with :heart: by <a href="https://github.com/eduardolirainfo" target="_blank">Eduardo Lira</a>
 
 &#xa0;
 
