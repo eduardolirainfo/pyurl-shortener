@@ -17,16 +17,24 @@ def index():
         string: return index.html with the codes in the session
     """
     is_exist = exist_path()[1]
+    list_code = []
+
     if not is_exist:
         session.clear()
     else:
         with open(exist_path()[0], encoding="utf-8") as urls_file:
             urls = json.load(urls_file)
             urls_file.close()
+            # print session id and keys in the session
+
             for code in urls.keys():
                 if code not in session.keys():
                     session[code] = False
-    return render_template("index.html", codes=session.keys())  # noqa E501
+                else:
+                    if session[code]:
+                        list_code.append(code)
+
+    return render_template("index.html", codes=list_code)  # noqa E501
 
 
 def about():
@@ -93,6 +101,14 @@ def redirect_to_url(code):
             urls_file.close()
             if code in urls.keys():
                 if "url" in urls[code].keys():
+                    if "http" not in urls[code]["url"]:
+                        return redirect("http://" + urls[code]["url"])
+
+                    if code in session.keys():
+                        session[code] = True
+                    else:
+                        session[code] = False
+
                     return redirect(urls[code]["url"])
     return abort(404)
 

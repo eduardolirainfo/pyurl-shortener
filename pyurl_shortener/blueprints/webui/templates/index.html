@@ -1,27 +1,47 @@
 {% extends "base.html" %}
 {% block title %}URL Shortener{% endblock %}
 {% block main %}
-<h1> URL Shortener</h1>
+<div class="py-5 text-center my-3 p-3 col-md-7 col-lg-8">
+    <svg class="d-block mx-auto mb-4" xmlns="http://www.w3.org/2000/svg" width="72" height="57" fill="purple"
+        class="bi bi-link-45deg" viewBox="0 0 16 16">
+        <path
+            d="M4.715 6.542 3.343 7.914a3 3 0 1 0 4.243 4.243l1.828-1.829A3 3 0 0 0 8.586 5.5L8 6.086a1.002 1.002 0 0 0-.154.199 2 2 0 0 1 .861 3.337L6.88 11.45a2 2 0 1 1-2.83-2.83l.793-.792a4.018 4.018 0 0 1-.128-1.287z" />
+        <path
+            d="M6.586 4.672A3 3 0 0 0 7.414 9.5l.775-.776a2 2 0 0 1-.896-3.346L9.12 3.55a2 2 0 1 1 2.83 2.83l-.793.792c.112.42.155.855.128 1.287l1.372-1.372a3 3 0 1 0-4.243-4.243L6.586 4.672z" />
+    </svg>
 
-<form action="/your-url" method="post">
-    <label for="url">Website URL</label>
-    <input type="url" name="url" value="" required>
-    <br>
-    <label for="code">Short Name</label>
-    <input type="text" name="code" value="" required>
-    <br>
-    <input type="submit" value="Shorten">
-</form>
+    <h2 class="text-center"> URL Shortener</h2>
+</div>
+<div class="row g-5">
+    <div class="my-3 p-3 col-md-5 col-lg-4 order-md-last bg-body rounded shadow-sm">
+        {% if codes %}
+        <h6 class="border-bottom pb-2 mb-0">Codes you have created</h6>
+        {% for code in codes %}
+        <div class="d-flex text-muted pt-3 border-bottom">
+            <p class="pb-3 mb-0 small lh-sm ">
+                <a class="d-block text-gray-dark" href="{{ url_for('webui.redirect_to_url',code=code) }}">{{ code }}</a>
 
-{% if codes %}
-<h2>Codes you have created</h2>
-<ul>
-    {% for code in codes %}
-    <a href="{{ url_for('webui.redirect_to_url',code=code) }}">
-        <li>{{ code }} </li>
-    </a>
-    {% endfor %}
-</ul>
-{% endif %}
+            </p>
+        </div>
+        {% endfor %}
+        {% endif %}
+    </div>
+    <div class="my-3 p-3 col-md-7 col-lg-8 bg-body rounded shadow-sm">
+        <form action="/your-url" method="post">
+            <div class="row g-3">
+                <div class="col-sm-6">
+                    <label class="form-label" for="url">Website URL</label>
+                    <input class="form-control" type="url" name="url" value="" required>
+                </div>
+                <div class="col-sm-6">
+                    <label class="form-label" for="code">Short Name</label>
+                    <input class="form-control" type="text" name="code" value="" required>
+                </div>
+            </div>
+            <hr class="my-4">
+            <input type="submit" class="w-100 btn btn-primary btn-lg" value="Shorten">
 
+        </form>
+    </div>
+</div>
 {% endblock %}
